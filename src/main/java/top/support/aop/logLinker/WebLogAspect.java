@@ -20,7 +20,7 @@ import java.util.Random;
  * 拼接参数、时间戳和随机数生成关键字；加在action层方法可定位一整个请求链路；
  * 关键字在配置中为 |%x| 注入
  * @author zhaojc
- * @create 2022-08-19
+ * 2022-08-19
  */
 @Log4j
 @Aspect
