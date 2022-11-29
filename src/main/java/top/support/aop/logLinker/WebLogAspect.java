@@ -1,14 +1,13 @@
 package top.support.aop.logLinker;
 
-import lombok.extern.log4j.Log4j;
 import org.apache.log4j.NDC;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import top.support.aop.LogLinker;
 
@@ -16,13 +15,18 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 /**
- * 日志链路器(log4j)
- * 拼接参数、时间戳和随机数生成关键字；加在action层方法可定位一整个请求链路；
+ * 日志链路器
+ *  拼接参数、时间戳和随机数生成关键字；加在方法可定位一整个请求链路；
+ *
+ * <b>log4j</b>
  * 关键字在配置中为 |%x| 注入
+ *
+ * <b>slf4j</b>
+ * 关键字在配置中为 |%X{LINKER}| 注入
  * @author zhaojc
- * 2022-08-19
+ * create 2022-08-19
+ * update 2022-11-29
  */
-@Log4j
 @Aspect
 @Component
 public class WebLogAspect {
@@ -54,10 +58,12 @@ public class WebLogAspect {
             threadLock = prefix+threadLock;
         }
         NDC.push(threadLock);
+        MDC.put("LINKER",threadLock);
     }
 
     @After("annotationPointCut()")
     public void deleteIntoLog(JoinPoint joinPoint){
+        MDC.remove("LINKER");
         NDC.clear();
     }
 }
