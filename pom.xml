@@ -6,7 +6,7 @@
 
     <groupId>io.github.zhaojc1221</groupId>
     <artifactId>general-support</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <name>general-support</name>
     <description>支持方法</description>
@@ -36,6 +36,12 @@
     <properties>
         <spring.version>5.3.8</spring.version>
     </properties>
+
+    <scm>
+        <url>https://github.com/zhaojc1221/support</url>
+        <connection>https://github.com/zhaojc1221/support.git</connection>
+        <developerConnection>https://github.com/zhaojc1221/support.git</developerConnection>
+    </scm>
 
     <dependencies>
         <!--   spring    -->
@@ -86,25 +92,36 @@
     <profiles>
         <profile>
             <!--注意,此id必须与setting.xml中指定的一致,不要自作聪明改它名字-->
-            <id>ossrh</id>
+<!--            <id>ossrh</id>-->
+            <id>release</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <build>
                 <!--发布到中央SNAPSHOT仓库插件-->
                 <plugins>
+<!--                    <plugin>-->
+<!--                        <groupId>org.sonatype.plugins</groupId>-->
+<!--                        <artifactId>nexus-staging-maven-plugin</artifactId>-->
+<!--                        <version>1.6.7</version>-->
+<!--                        <extensions>true</extensions>-->
+<!--                        <configuration>-->
+<!--                            <serverId>ossrh</serverId>-->
+<!--                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>-->
+<!--                            <autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+<!--                        </configuration>-->
+<!--                    </plugin>-->
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>2.5.3</version>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <releaseProfiles>release</releaseProfiles>
+                            <goals>deploy</goals>
                         </configuration>
                     </plugin>
-
                     <!--生成源码插件-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -157,11 +174,11 @@
             <distributionManagement>
                 <snapshotRepository>
                     <!--注意,此id必须与setting.xml中指定的一致-->
-                    <id>ossrh</id>
+                    <id>release</id>
                     <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
                 <repository>
-                    <id>ossrh</id>
+                    <id>release</id>
                     <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>
